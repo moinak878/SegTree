@@ -2,19 +2,20 @@
 #define ll long long
 using namespace std;
 vector<ll> tree;
-ll f(ll i , ll lx , ll rx , ll left , ll right , ll v){
+
+ll f(ll i, ll lx, ll rx, ll left, ll right, ll v)
+{
     if(lx>right || rx<left){
         return 0;
     }
     if(lx>=left && rx<=right){
-        if(v==-1)
-            return tree[i];
-        tree[i] += v;
-        return 0;
+        if(v!=-1)
+            tree[i] = max(tree[i], v);
+        return tree[i];
     }
     ll mid = (lx + rx )/ 2;
-    ll ans = f(2 * i, lx, mid, left, right, v) + f(2 * i + 1, mid + 1, rx, left, right, v);
-    return (tree[i] + ans);
+    ll ans = max(f(2 * i, lx, mid, left, right, v) , f(2 * i + 1, mid + 1, rx, left, right, v));
+    return (max(tree[i], ans));
 }
 int main()
 {

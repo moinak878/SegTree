@@ -1,3 +1,4 @@
+//non-commutative operations -- lazy propagation 
 #include<bits/stdc++.h>
 #define ll long long
 using namespace std;
@@ -8,13 +9,19 @@ ll f(ll i , ll lx , ll rx , ll left , ll right , ll v){
     }
     if(lx>=left && rx<=right){
         if(v==-1)
-            return tree[i];
-        tree[i] += v;
+                return tree[i];
+        if(left!=right){
+            tree[2 * i] = tree[i];
+            tree[2 * i + 1] = tree[i];
+        }
+        tree[i] = v;
         return 0;
     }
     ll mid = (lx + rx )/ 2;
-    ll ans = f(2 * i, lx, mid, left, right, v) + f(2 * i + 1, mid + 1, rx, left, right, v);
-    return (tree[i] + ans);
+    ll ans = f(2 * i, lx, mid, left, right, v);
+    if(ans==0) 
+        ans = f(2 * i + 1, mid + 1, rx, left, right, v);
+    return (tree[i]+ans);
 }
 int main()
 {
